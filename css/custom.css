@@ -50,6 +50,10 @@ h1{
  .portlet-content {
   padding: 0.4em;
  }
+ .portlet-content .btn {
+   margin-right: 5px;
+   margin-bottom: 5px;
+ }
  .portlet-placeholder {
   border: 1px dotted black;
   margin: 0 1em 1em 0;
