@@ -11,11 +11,9 @@ function drawTasks(tasks) {
   draganddrop();
 }
 
-/* 
-
- function drawTask(index,task) {
+function drawTask(index,task) {
   // construimos el portlet de la tarea
-  var item = $('<div id="cardSemana" class="portlet" data-id="'+index+'"><div class="portlet-header" style="background-color: '+task.color+'">'+task.name+'</div><div class="portlet-content">'+task.description+'<br><button onclick="drawModalTask('+index+')" type="button" class="btn-task-edit btn btn-success"><i class="fa fa-edit" aria-hidden="true"></i></button> <button onclick="eliminarElemento()"<type="button" class="btn-task-edit btn btn-danger" style="margin-left: 54px"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></div></div></div></div>');
+  var item = $('<div class="portlet" data-id="'+index+'"><div class="portlet-header" style="background-color: '+task.color+'">'+task.name+'</div><div class="portlet-content">'+task.description+'<br><button onclick="drawModalTask('+index+')" type="button" class="btn-task-edit btn btn-success"><i class="fa fa-edit" aria-hidden="true"></i></button><button style="margin-left: 57px" data-bs-toggle="modal" href="#eliminar-task-'+index+'" type="button" class="btn-task-edit btn btn-danger"><i class="fa fa-trash-alt" aria-hidden="true"></i></button></div></div><div class="modal" tabindex="-1" id="eliminar-task-'+index+'"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Eliminar Tarea '+task.name+'</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p>¿Estás seguro que quieres eliminar la tarea ?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="button" onclick="removeTask('+index+')" class="btn btn-primary">Sí</button></div></div></div></div>');
   // si no tiene semana asignada lo insertamos en tareas pendientes de asignar
   if( !task.yearweek ) {
     item.appendTo('#tasks-pending');
@@ -23,31 +21,20 @@ function drawTasks(tasks) {
   } else if( $('#select-semana').val() == task.yearweek ) {
     item.appendTo('#tasks-week #day-'+task.dayofweek);
   }
-} */
-
-function drawTask(index, task) {
-  // construimos el portlet de la tarea
-  var card = $('<div class="portlet" data-id="'+index+'"><div class="portlet-header" style="background-color: '+task.color+'">'+task.name+'</div><div class="portlet-content">'+task.description+'<br><button onclick="drawModalTask('+index+')" type="button" class="btn-task-edit btn btn-success"><i class="fa fa-edit" aria-hidden="true"></i></button> <button class="eliminar-card btn-task-edit btn btn-danger" style="margin-left: 54px"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></div></div>');
-  
-  // si no tiene semana asignada lo insertamos en tareas pendientes de asignar
-  if (!task.yearweek) {
-    card.appendTo('#tasks-pending');
-  // si la semana es la seleccionada insertamos las tareas en los dias de la semana
-  } else if ($('#select-semana').val() == task.yearweek) {
-    card.appendTo('#tasks-week #day-' + task.dayofweek);
-  }
-
-  // Buscamos el botón "eliminar" dentro de la card y asignamos una función de eliminación
-  card.find('.eliminar-card').on('click', function() {
-    // Obtenemos el valor de "data-id" de la card correspondiente al botón
-    var id = $(this).closest('.portlet').data('id');
-
-    // Eliminamos la card correspondiente al id
-    var card = $('.portlet[data-id="' + id + '"]');
-    card.remove();
-  });
 }
 
+function removeTask(index) {
+  console.log(index);
+  console.log(tasksData);
+  if( typeof tasksData[index] != 'undefined' ) {
+      delete tasksData[index];
+  }
+  // volvemos a dibujar las semanas
+  drawTasks(tasksData);
+  $('#eliminar-task-'+index).remove();
+  $('.modal-backdrop.show').remove();
+  return;
+}
 
 function emptyTasks() {
   $('#tasks-pending').empty();
